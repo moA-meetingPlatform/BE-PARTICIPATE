@@ -1,4 +1,4 @@
-package com.moa.participate.application;
+package com.moa.participate.presentation;
 
 
 import com.moa.participate.common.ApiResult;
