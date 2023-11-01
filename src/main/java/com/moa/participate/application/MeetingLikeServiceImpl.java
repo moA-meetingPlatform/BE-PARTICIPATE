@@ -1,11 +1,8 @@
 package com.moa.participate.application;
 
 
-import com.moa.participate.common.exception.CustomException;
-import com.moa.participate.common.exception.ErrorCode;
 import com.moa.participate.domain.MeetingLike;
-import com.moa.participate.dto.MeetingLikeCreateDto;
-import com.moa.participate.dto.MeetingLikeDeleteDto;
+import com.moa.participate.dto.MeetingLikeCreateDeleteDto;
 import com.moa.participate.infrastructure.MeetingLikeQueryDslRepository;
 import com.moa.participate.infrastructure.MeetingLikeRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,20 +22,16 @@ public class MeetingLikeServiceImpl implements MeetingLikeService {
 
 
 	@Override
-	public void createMeetingLike(MeetingLikeCreateDto meetingLikeCreateDto) {
-		if (meetingLikeRepository.existsByMeetingIdAndUserUuid(meetingLikeCreateDto.getMeetingId(), meetingLikeCreateDto.getUserUuid())) {
-			throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+	public void createOrDeleteMeetingLike(MeetingLikeCreateDeleteDto meetingLikeCreateDeleteDto) {
+		// 이미 좋아요한 모임이면 삭제, 아니면 생성
+		if (meetingLikeRepository.existsByMeetingIdAndUserUuid(meetingLikeCreateDeleteDto.getMeetingId(), meetingLikeCreateDeleteDto.getUserUuid())) {
+			meetingLikeQueryDslRepository.deleteByMeetingIdAndUserUuid(meetingLikeCreateDeleteDto.getMeetingId(), meetingLikeCreateDeleteDto.getUserUuid());
+		} else {
+			meetingLikeRepository.save(MeetingLike.builder()
+				.meetingId(meetingLikeCreateDeleteDto.getMeetingId())
+				.userUuid(meetingLikeCreateDeleteDto.getUserUuid())
+				.build());
 		}
-		meetingLikeRepository.save(MeetingLike.builder()
-			.meetingId(meetingLikeCreateDto.getMeetingId())
-			.userUuid(meetingLikeCreateDto.getUserUuid())
-			.build());
-	}
-
-
-	@Override
-	public void deleteMeetingLike(MeetingLikeDeleteDto meetingLikeDeleteDto) {
-		meetingLikeQueryDslRepository.deleteByMeetingIdAndUserUuid(meetingLikeDeleteDto.getMeetingId(), meetingLikeDeleteDto.getUserUuid());
 	}
 
 
