@@ -9,7 +9,11 @@ import com.moa.participate.dto.MeetingLikeDeleteDto;
 import com.moa.participate.infrastructure.MeetingLikeQueryDslRepository;
 import com.moa.participate.infrastructure.MeetingLikeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 
 @Service
@@ -35,6 +39,14 @@ public class MeetingLikeServiceImpl implements MeetingLikeService {
 	@Override
 	public void deleteMeetingLike(MeetingLikeDeleteDto meetingLikeDeleteDto) {
 		meetingLikeQueryDslRepository.deleteByMeetingIdAndUserUuid(meetingLikeDeleteDto.getMeetingId(), meetingLikeDeleteDto.getUserUuid());
+	}
+
+
+	@Override
+	public Slice<Long> getMeetingLikeSlice(UUID userUuid, Pageable pageable) {
+		Slice<MeetingLike> meetingLikeSlice = meetingLikeRepository.findByUserUuid(userUuid, pageable);
+		// MeetingLike Slice -> Meeting ID Slice 변환
+		return meetingLikeSlice.map(MeetingLike::getMeetingId);
 	}
 
 }

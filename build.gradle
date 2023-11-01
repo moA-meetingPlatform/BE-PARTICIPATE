@@ -58,6 +58,10 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+clean {
+    delete file('/build/generated')
+}
+
 tasks.register('cleanQuerydsl') {
     delete file('/build/generated')
 }
