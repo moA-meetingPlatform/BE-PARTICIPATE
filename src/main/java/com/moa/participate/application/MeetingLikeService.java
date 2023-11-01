@@ -1,8 +1,7 @@
 package com.moa.participate.application;
 
 
-import com.moa.participate.dto.MeetingLikeCreateDto;
-import com.moa.participate.dto.MeetingLikeDeleteDto;
+import com.moa.participate.dto.MeetingLikeCreateDeleteDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -11,8 +10,12 @@ import java.util.UUID;
 
 public interface MeetingLikeService {
 
-	void createMeetingLike(MeetingLikeCreateDto meetingLikeCreateDto);
-	void deleteMeetingLike(MeetingLikeDeleteDto meetingLikeDeleteDto);
+	/**
+	 * 모임 좋아요 생성 또는 삭제
+	 *
+	 * @param meetingLikeCreateDeleteDto 모임 좋아요 생성 또는 삭제 DTO
+	 */
+	void createOrDeleteMeetingLike(MeetingLikeCreateDeleteDto meetingLikeCreateDeleteDto);
 
 	/**
 	 * 사용자가 좋아요한 모임 목록 조회

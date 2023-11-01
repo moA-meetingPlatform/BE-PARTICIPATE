@@ -11,7 +11,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MeetingLikeCreateDto {
+public class MeetingLikeCreateDeleteDto {
 
 	private Long meetingId;
 	private UUID userUuid;
