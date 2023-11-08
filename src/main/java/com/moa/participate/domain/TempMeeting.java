@@ -23,20 +23,20 @@ public class TempMeeting extends BaseCreateDateTime {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "temp_url")
-	private String tempUrl;
+	@Column(name = "temporary_meeting_url", length = 5000)
+	private String temporaryMeetingDataUrl;
 
 	@Column(name = "user_uuid", nullable = false)
 	private UUID userUuid;
 
 
-	public void updateTempUrl(String tempUrl) {
-		this.tempUrl = tempUrl;
+	public void updateTemporaryMeetingDataUrl(String tempUrl) {
+		this.temporaryMeetingDataUrl = tempUrl;
 	}
 
 
 	public void updateTempUrlNull() {
-		this.tempUrl = null;
+		this.temporaryMeetingDataUrl = null;
 	}
 
 }

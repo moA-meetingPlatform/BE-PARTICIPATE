@@ -1,5 +1,6 @@
 package com.moa.participate.domain;
 
+
 import com.moa.participate.common.BaseDateTime;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "meeting_review")
 public class MeetingReview extends BaseDateTime {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -24,8 +26,8 @@ public class MeetingReview extends BaseDateTime {
 	@Column(name = "reviewer_user_uuid", nullable = false)
 	private UUID reviewerUserUuid;
 
-	@Column(name = "host_user_uuid", nullable = false)
-	private UUID hostUserUuid;
+	@Column(name = "meeting_host_uuid", nullable = false)
+	private UUID meetingHostUuid;
 
 	@Column(name = "meeting_id", nullable = false)
 	private Long meetingId;
@@ -33,6 +35,7 @@ public class MeetingReview extends BaseDateTime {
 	@Column(name = "rating", nullable = false)
 	private Integer rating;
 
-	@Column(name = "content", length = 255)
-	private String content;
+	@Column(name = "meeting_review_content", length = 255)
+	private String meeting_review_content;
+
 }
