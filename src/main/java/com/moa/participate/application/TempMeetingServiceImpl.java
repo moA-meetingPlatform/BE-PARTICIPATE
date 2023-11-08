@@ -32,9 +32,9 @@ public class TempMeetingServiceImpl implements TempMeetingService {
 	public void createOrUpdateTempMeeting(TempMeetingCreateDto tempMeetingCreateDto) {
 		TempMeeting tempMeeting = tempMeetingRepository.getByUserUuid(tempMeetingCreateDto.getUserUuid());
 		if (tempMeeting == null) {    // 유저의 임시 미팅이 없으면 생성
-			tempMeetingRepository.save(modelMapper.map(tempMeetingCreateDto, TempMeeting.class));
+			tempMeetingRepository.save(tempMeetingCreateDto.toEntity());
 		} else {    // 유저의 임시 미팅이 있으면 url 업데이트
-			tempMeeting.updateTempUrl(tempMeetingCreateDto.getTempUrl());
+			tempMeeting.updateTemporaryMeetingDataUrl(tempMeetingCreateDto.getTempUrl());
 		}
 	}
 
@@ -54,13 +54,13 @@ public class TempMeetingServiceImpl implements TempMeetingService {
 	public TempMeetingGetDto getTempMeetingByUuid(UUID userUuid) {
 		TempMeeting tempMeeting = tempMeetingRepository.getByUserUuid(userUuid);
 
-		if (tempMeeting == null || tempMeeting.getTempUrl() == null) {
+		if (tempMeeting == null || tempMeeting.getTemporaryMeetingDataUrl() == null) {
 			// 유저의 임시 미팅 테이블이 없거나 url이 비어있으면 에러
 			throw new CustomException(ErrorCode.NOT_FOUND_RESOURCE);
 		}
 
 		// 유저의 임시 미팅 테이블이 있고 url이 비어있지 않으면 url 리턴
-		return modelMapper.map(tempMeeting, TempMeetingGetDto.class);
+		return new TempMeetingGetDto(tempMeeting);
 	}
 
 }

@@ -19,6 +19,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "participant_application")
 public class ParticipantApplication extends BaseDateTime {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -26,24 +27,26 @@ public class ParticipantApplication extends BaseDateTime {
 	@Column(name = "meeting_id", nullable = false)
 	private Long meetingId;
 
-	@Column(name = "user_uuid")
-	private UUID userUuid;
+	@Column(name = "participant_uuid")
+	private UUID participantUuid;
 
 	@Convert(converter = ApproveStatusConverter.class)
 	@Column(name = "approve_status", nullable = false)
 	private ApproveStatus approveStatus;
 
-	@Column(name = "is_attend", columnDefinition = "tinyint default 0")
-	private Boolean isAttend;
+	@Column(name = "participation_status", columnDefinition = "tinyint default 0")
+	private Boolean participationStatus;
 
-	@Column(name = "meeting_answer")
-	private String meetingAnswer;
+	@Column(name = "meeting_participation_answer")
+	private String meetingParticipationAnswer;  // 모임 참여 질문에 대한 답변
 
-	@Column(name = "is_refund_need", columnDefinition = "tinyint default 0", nullable = false)
-	private Boolean isRefundNeed;
+	@Column(name = "refund_required_status", columnDefinition = "tinyint default 0", nullable = false)
+	private Boolean refundRequiredStatus;
 
-	@Column(name = "refund_rate", columnDefinition = "float(3, 1)")
-	private Float refundRate;
+	@Column(name = "refund_percentage", columnDefinition = "float(3, 1)")
+	private Float refundPercentage;
 
+	@Column(name = "refund_amount")
+	private Integer refundAmount;
 
 }
