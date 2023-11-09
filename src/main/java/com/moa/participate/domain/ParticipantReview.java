@@ -1,7 +1,7 @@
 package com.moa.participate.domain;
 
 
-import com.moa.participate.common.BaseCreateDateTime;
+import com.moa.global.common.BaseCreateDateTime;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
