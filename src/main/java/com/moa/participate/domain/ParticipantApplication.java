@@ -2,10 +2,9 @@ package com.moa.participate.domain;
 
 
 import com.moa.global.common.BaseDateTime;
-import com.moa.participate.infrastructure.converter.ApproveStatusConverter;
+import com.moa.participate.infrastructure.converter.ApplicationStatusConverter;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,9 +12,7 @@ import java.util.UUID;
 
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "participant_application")
 public class ParticipantApplication extends BaseDateTime {
@@ -30,9 +27,9 @@ public class ParticipantApplication extends BaseDateTime {
 	@Column(name = "participant_uuid")
 	private UUID participantUuid;
 
-	@Convert(converter = ApproveStatusConverter.class)
-	@Column(name = "approve_status", nullable = false)
-	private ApproveStatus approveStatus;
+	@Convert(converter = ApplicationStatusConverter.class)
+	@Column(name = "application_status", nullable = false)
+	private ApplicationStatus applicationStatus;
 
 	@Column(name = "participation_status", columnDefinition = "tinyint default 0")
 	private Boolean participationStatus;
@@ -48,5 +45,17 @@ public class ParticipantApplication extends BaseDateTime {
 
 	@Column(name = "refund_amount")
 	private Integer refundAmount;
+
+
+	public ParticipantApplication(Long meetingId, UUID participantUuid, String meetingParticipationAnswer, ApplicationStatus applicationStatus) {
+		this.meetingId = meetingId;
+		this.participantUuid = participantUuid;
+		this.meetingParticipationAnswer = meetingParticipationAnswer;
+		this.applicationStatus = applicationStatus;
+		this.participationStatus = false;
+		this.refundRequiredStatus = false;
+		this.refundPercentage = 0.0f;
+		this.refundAmount = 0;
+	}
 
 }
