@@ -1,7 +1,7 @@
 package com.moa.participate.infrastructure.converter;
 
 
-import com.moa.participate.common.AbstractBaseEnumConverter;
+import com.moa.global.common.AbstractBaseEnumConverter;
 import com.moa.participate.domain.ApproveStatus;
 
 
