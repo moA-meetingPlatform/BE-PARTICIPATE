@@ -36,6 +36,6 @@ public class MeetingReview extends BaseDateTime {
 	private Integer rating;
 
 	@Column(name = "meeting_review_content", length = 255)
-	private String meeting_review_content;
+	private String meetingReviewContent;
 
 }
