@@ -17,4 +17,6 @@ public interface MeetingReviewService {
 	void createMeetingReview(MeetingReviewCreatDto meetingReviewCreatDto);
 	Slice<MeetingReviewGetDto> getMeetingReviewListByHostUuid(UUID uuid, Pageable pageable);
 
+	boolean existsByMeetingIdAndReviewerUserUuid(Long meetingId, UUID reviewerUserUuid);
+
 }

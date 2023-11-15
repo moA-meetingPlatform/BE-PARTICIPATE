@@ -7,7 +7,6 @@ import com.moa.participate.application.MeetingReviewService;
 import com.moa.participate.dto.MeetingReviewCreatDto;
 import com.moa.participate.dto.MeetingReviewGetDto;
 import com.moa.participate.vo.request.MeetingReviewCreateRequest;
-import com.moa.participate.vo.request.ParticipantCreateRequest;
 import com.moa.participate.vo.response.MeetingReviewResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,8 +39,9 @@ public class MeetingReviewController {
 
 	@Operation(summary = "모임 리뷰 생성", description = "모임 리뷰 생성")
 	@ApiResponses({
-		@ApiResponse(responseCode = "200", description = "OK",
-			content = @Content(schema = @Schema(implementation = MeetingReviewCreateRequest.class))),
+		@ApiResponse(responseCode = "200", description = "OK"),
+		@ApiResponse(responseCode = "400", description = "리뷰어와 리뷰 대상자가 같은 경우"),
+		@ApiResponse(responseCode = "409", description = "이미 리뷰를 작성한 경우"),
 		@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
 	})
 	@PostMapping("")
@@ -55,7 +55,7 @@ public class MeetingReviewController {
 	@Operation(summary = "모임 리뷰 조회", description = "모임 리뷰 조회")
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "OK",
-			content = @Content(schema = @Schema(implementation = ParticipantCreateRequest.class))),
+			content = @Content(schema = @Schema(implementation = MeetingReviewResponse.class))),
 		@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
 	})
 	@Parameters({

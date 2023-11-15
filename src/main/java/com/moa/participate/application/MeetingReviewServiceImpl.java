@@ -30,10 +30,16 @@ public class MeetingReviewServiceImpl implements MeetingReviewService {
 	 */
 	@Override
 	public void createMeetingReview(MeetingReviewCreatDto meetingReviewCreatDto) {
-		if (meetingReviewCreatDto.getMeetingHostUuid() == meetingReviewCreatDto.getReviewerUserUuid()) {
+		if (meetingReviewCreatDto.getMeetingHostUuid().equals(meetingReviewCreatDto.getReviewerUserUuid())) {
 			// 리뷰어와 리뷰 대상자가 같으면 예외 발생
 			throw new CustomException(ErrorCode.BAD_REQUEST);
 		}
+
+		if (existsByMeetingIdAndReviewerUserUuid(meetingReviewCreatDto.getMeetingId(), meetingReviewCreatDto.getReviewerUserUuid())) {
+			// 이미 리뷰를 작성한 경우 예외 발생
+			throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+		}
+
 		MeetingReview meetingReview = meetingReviewCreatDto.toEntity(); // dto -> entity
 		meetingReviewRepository.save(meetingReview);
 	}
@@ -52,6 +58,13 @@ public class MeetingReviewServiceImpl implements MeetingReviewService {
 	public Slice<MeetingReviewGetDto> getMeetingReviewListByHostUuid(UUID uuid, Pageable pageable) {
 		Slice<MeetingReview> meetingReviewSlice = meetingReviewRepository.findByMeetingHostUuid(uuid, pageable);
 		return MeetingReviewGetDto.fromEntitySlice(meetingReviewSlice);
+	}
+
+
+	@Override
+	@Transactional(readOnly = true)
+	public boolean existsByMeetingIdAndReviewerUserUuid(Long meetingId, UUID reviewerUserUuid) {
+		return meetingReviewRepository.existsByMeetingIdAndReviewerUserUuid(meetingId, reviewerUserUuid);
 	}
 
 }
