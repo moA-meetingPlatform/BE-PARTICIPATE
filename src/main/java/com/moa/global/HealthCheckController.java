@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/v1/participant")
+@RequestMapping("/api/v1/meeting-feature/participate")
 @Slf4j
 @RequiredArgsConstructor
 public class HealthCheckController {
