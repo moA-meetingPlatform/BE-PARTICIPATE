@@ -4,7 +4,9 @@ package com.moa.participate.presentation;
 import com.moa.global.common.ApiResult;
 import com.moa.global.common.SliceResponse;
 import com.moa.participate.application.MeetingReviewService;
+import com.moa.participate.dto.MeetingReviewCreatDto;
 import com.moa.participate.dto.MeetingReviewGetDto;
+import com.moa.participate.vo.request.MeetingReviewCreateRequest;
 import com.moa.participate.vo.request.ParticipantCreateRequest;
 import com.moa.participate.vo.response.MeetingReviewResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,10 +23,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -37,6 +36,20 @@ public class MeetingReviewController {
 
 	private final ModelMapper modelMapper;
 	private final MeetingReviewService meetingReviewService;
+
+
+	@Operation(summary = "모임 리뷰 생성", description = "모임 리뷰 생성")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "OK",
+			content = @Content(schema = @Schema(implementation = MeetingReviewCreateRequest.class))),
+		@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+	})
+	@PostMapping("")
+	public ResponseEntity<ApiResult<Void>> createMeetingReview(@RequestBody MeetingReviewCreateRequest meetingReviewCreateRequest) {
+		MeetingReviewCreatDto meetingReviewCreatDto = modelMapper.map(meetingReviewCreateRequest, MeetingReviewCreatDto.class);
+		meetingReviewService.createMeetingReview(meetingReviewCreatDto);
+		return ResponseEntity.ok(ApiResult.ofSuccess(null));
+	}
 
 
 	@Operation(summary = "모임 리뷰 조회", description = "모임 리뷰 조회")
