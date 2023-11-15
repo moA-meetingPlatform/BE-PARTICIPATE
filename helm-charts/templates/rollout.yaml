@@ -55,7 +55,7 @@ spec:
           {{- toYaml .Values.env | nindent 12 }}
         livenessProbe:
           httpGet:
-            path: /api/v1/participate/test
+            path: /api/v1/meeting-feature/participate/test
             port: http
           initialDelaySeconds: 30
           periodSeconds: 30
