@@ -12,5 +12,6 @@ import java.util.UUID;
 public interface MeetingReviewRepository extends JpaRepository<MeetingReview, Long> {
 
 	Slice<MeetingReview> findByMeetingHostUuid(UUID uuid, Pageable pageable);
+	boolean existsByMeetingIdAndReviewerUserUuid(Long meetingId, UUID reviewerUserUuid);
 
 }
