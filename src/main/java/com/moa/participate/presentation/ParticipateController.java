@@ -38,8 +38,7 @@ public class ParticipateController {
 
 	@Operation(summary = "모임 참가", description = "모임 참가")
 	@ApiResponses({
-		@ApiResponse(responseCode = "200", description = "OK",
-			content = @Content(schema = @Schema(implementation = ParticipantCreateRequest.class))),
+		@ApiResponse(responseCode = "200", description = "OK"),
 		@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
 	})
 	@PostMapping("")
@@ -52,7 +51,7 @@ public class ParticipateController {
 	@Operation(summary = "내가 참가하는 모임 리스트 조회", description = "내가 참가하는 모임 조회")
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "OK",
-			content = @Content(schema = @Schema(implementation = ParticipantCreateRequest.class))),
+			content = @Content(schema = @Schema(implementation = MyParticipantApplicationListResponse.class))),
 		@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
 	})
 	@GetMapping("/my")
