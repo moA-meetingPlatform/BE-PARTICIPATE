@@ -101,7 +101,7 @@ public class ParticipantApplicationServiceImpl implements ParticipantApplication
 
 		// 모임 참여 신청을 거절할 경우 update 이벤트 발행
 		participateStatusUpdateEventProducer.sendParticipateStatusUpdateEvent(
-			ParticipantApplicationUpdateEventDto.fromEntityAndPrevApplicationStatus(participantApplication, ApplicationStatus.CANCEL, true)
+			ParticipantApplicationUpdateEventDto.fromEntityAndPrevApplicationStatus(participantApplication, prevApplicationStatus, true)
 		);
 
 	}
