@@ -5,6 +5,7 @@ import com.moa.global.common.ApiResult;
 import com.moa.global.common.exception.CustomException;
 import com.moa.global.common.exception.ErrorCode;
 import com.moa.participate.application.ParticipantApplicationService;
+import com.moa.participate.domain.ApplicationStatus;
 import com.moa.participate.dto.ParticipantApplicationGetDto;
 import com.moa.participate.vo.response.ParticipantApplicationWaitListResponse;
 import com.moa.participate.vo.response.ParticipantApplicationWaitResponse;
@@ -55,13 +56,13 @@ public class HostParticipateController {
 	})
 	@PostMapping("/{participateId}/{status}")
 	public ResponseEntity<ApiResult<Void>> modifyParticipantApplication(@PathVariable("participateId") Long participateId, @PathVariable("status") String status) {
-		if (status.equals("Y")) {
-			participantApplicationService.approveParticipantApplication(participateId);
-		} else if (status.equals("N")) {
-			participantApplicationService.denyParticipantApplication(participateId);
-		} else {
-			throw new CustomException(ErrorCode.BAD_REQUEST);
-		}
+		ApplicationStatus applicationStatus = switch (status) {
+			case "approve" -> ApplicationStatus.APPROVE;
+			case "deny" -> ApplicationStatus.DENY;
+			default -> throw new CustomException(ErrorCode.BAD_REQUEST);
+		};
+
+		participantApplicationService.updateParticipantApplicationByHost(participateId, applicationStatus);
 		return ResponseEntity.ok(ApiResult.ofSuccess(null));
 	}
 

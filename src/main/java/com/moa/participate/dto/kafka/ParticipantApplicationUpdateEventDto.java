@@ -16,14 +16,17 @@ public class ParticipantApplicationUpdateEventDto {
 	private long meetingId;
 	private ApplicationStatus prevApplicationStatus;
 	private ApplicationStatus currentApplicationStatus;
+	private boolean updateByHost;
 
 
-	public static ParticipantApplicationUpdateEventDto fromEntityAndApplicationStatus(ParticipantApplication participantApplication, ApplicationStatus applicationStatus) {
+	public static ParticipantApplicationUpdateEventDto fromEntityAndPrevApplicationStatus(ParticipantApplication participantApplication, ApplicationStatus prevApplicationStatus,
+		boolean updateByHost) {
 		ParticipantApplicationUpdateEventDto dto = new ParticipantApplicationUpdateEventDto();
 		dto.id = participantApplication.getId();
-		dto.prevApplicationStatus = participantApplication.getApplicationStatus();
-		dto.currentApplicationStatus = applicationStatus;
+		dto.prevApplicationStatus = prevApplicationStatus;
+		dto.currentApplicationStatus = participantApplication.getApplicationStatus();
 		dto.meetingId = participantApplication.getMeetingId();
+		dto.setUpdateByHost(updateByHost);
 		return dto;
 	}
 

@@ -4,6 +4,7 @@ package com.moa.participate.presentation;
 import com.moa.global.common.ApiResult;
 import com.moa.global.common.exception.CustomException;
 import com.moa.global.common.exception.ErrorCode;
+import com.moa.global.config.JwtTokenUtil;
 import com.moa.participate.application.ParticipantApplicationService;
 import com.moa.participate.domain.ApplicationStatus;
 import com.moa.participate.dto.ParticipantApplicationGetDto;
@@ -35,6 +36,8 @@ public class ParticipateController {
 	private final ModelMapper modelMapper;
 	private final ParticipantApplicationService participantApplicationService;
 
+	private final JwtTokenUtil jwtTokenUtil;
+
 
 	@Operation(summary = "모임 참가", description = "모임 참가")
 	@ApiResponses({
@@ -44,6 +47,19 @@ public class ParticipateController {
 	@PostMapping("")
 	public ResponseEntity<ApiResult<Void>> createParticipant(@RequestBody ParticipantCreateRequest request) {
 		participantApplicationService.createParticipantApplication(modelMapper.map(request, ParticipantCreateDto.class));
+		return ResponseEntity.ok(ApiResult.ofSuccess(null));
+	}
+
+
+	@Operation(summary = "모임 참가 취소", description = "모임 참가 취소")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "OK"),
+		@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+	})
+	@PostMapping("/{participateId}/cancel")
+	public ResponseEntity<ApiResult<Void>> cancelParticipant(@PathVariable("participateId") Long participateId, @RequestHeader(value = "Authorization") String token) {
+		UUID loginUserUuid = UUID.fromString(jwtTokenUtil.getSubject(token));
+		participantApplicationService.cancelParticipantApplication(participateId, loginUserUuid);
 		return ResponseEntity.ok(ApiResult.ofSuccess(null));
 	}
 

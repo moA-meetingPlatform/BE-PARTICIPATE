@@ -15,8 +15,8 @@ public interface ParticipantApplicationService {
 	List<ParticipantApplicationGetDto> getParticipantApplicationListByApplicationStatus(UUID uuid, ApplicationStatus applicationStatus);
 	List<ParticipantApplicationGetDto> getWaitParticipantApplicationListByMeetingId(Long meetingId);
 
-	void approveParticipantApplication(Long id);
+	void updateParticipantApplicationByHost(Long id, ApplicationStatus applicationStatus);
 
-	void denyParticipantApplication(Long id);
+	void cancelParticipantApplication(Long id, UUID userUuid);
 
 }
