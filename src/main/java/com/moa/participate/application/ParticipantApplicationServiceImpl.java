@@ -5,7 +5,7 @@ import com.moa.global.common.exception.CustomException;
 import com.moa.global.common.exception.ErrorCode;
 import com.moa.participate.domain.ApplicationStatus;
 import com.moa.participate.domain.ParticipantApplication;
-import com.moa.participate.dto.ParticipantApplicationListItemGetDto;
+import com.moa.participate.dto.ParticipantApplicationGetDto;
 import com.moa.participate.dto.ParticipantCreateDto;
 import com.moa.participate.infrastructure.ParticipantApplicationRepository;
 import lombok.RequiredArgsConstructor;
@@ -54,10 +54,19 @@ public class ParticipantApplicationServiceImpl implements ParticipantApplication
 
 
 	@Override
-	public List<ParticipantApplicationListItemGetDto> getParticipantApplicationListByApplicationStatus(UUID uuid, ApplicationStatus applicationStatus) {
+	public List<ParticipantApplicationGetDto> getParticipantApplicationListByApplicationStatus(UUID uuid, ApplicationStatus applicationStatus) {
 		List<ParticipantApplication> entityList = participantApplicationRepository.findByParticipantUuidAndApplicationStatusOrderByIdDesc(uuid, applicationStatus);
 		return entityList.stream()
-			.map(o -> modelMapper.map(o, ParticipantApplicationListItemGetDto.class))
+			.map(o -> modelMapper.map(o, ParticipantApplicationGetDto.class))
+			.toList();
+	}
+
+
+	@Override
+	public List<ParticipantApplicationGetDto> getWaitParticipantApplicationListByMeetingId(Long meetingId) {
+		List<ParticipantApplication> entityList = participantApplicationRepository.findByMeetingIdAndApplicationStatus(meetingId, ApplicationStatus.WAIT);
+		return entityList.stream()
+			.map(o -> modelMapper.map(o, ParticipantApplicationGetDto.class))
 			.toList();
 	}
 

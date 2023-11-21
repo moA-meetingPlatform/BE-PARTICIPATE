@@ -6,7 +6,7 @@ import com.moa.global.common.exception.CustomException;
 import com.moa.global.common.exception.ErrorCode;
 import com.moa.participate.application.ParticipantApplicationService;
 import com.moa.participate.domain.ApplicationStatus;
-import com.moa.participate.dto.ParticipantApplicationListItemGetDto;
+import com.moa.participate.dto.ParticipantApplicationGetDto;
 import com.moa.participate.dto.ParticipantCreateDto;
 import com.moa.participate.vo.request.ParticipantCreateRequest;
 import com.moa.participate.vo.response.MyParticipantApplicationListItemResponse;
@@ -69,7 +69,7 @@ public class ParticipateController {
 		}
 
 		// 모임 참여 신청 리스트 조회
-		List<ParticipantApplicationListItemGetDto> dtoList = participantApplicationService.getParticipantApplicationListByApplicationStatus(userUuid, applicationStatus);
+		List<ParticipantApplicationGetDto> dtoList = participantApplicationService.getParticipantApplicationListByApplicationStatus(userUuid, applicationStatus);
 		List<MyParticipantApplicationListItemResponse> responseList =
 			dtoList.stream()
 				.map(MyParticipantApplicationListItemResponse::new)

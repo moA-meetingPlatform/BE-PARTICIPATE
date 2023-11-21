@@ -15,4 +15,6 @@ public interface ParticipantApplicationRepository extends JpaRepository<Particip
 	Optional<ParticipantApplication> findByMeetingIdAndParticipantUuid(Long meetingId, UUID participantUuid);
 	List<ParticipantApplication> findByParticipantUuidAndApplicationStatusOrderByIdDesc(UUID participantUuid, ApplicationStatus applicationStatus);
 
+	List<ParticipantApplication> findByMeetingIdAndApplicationStatus(Long meetingId, ApplicationStatus applicationStatus);
+
 }
