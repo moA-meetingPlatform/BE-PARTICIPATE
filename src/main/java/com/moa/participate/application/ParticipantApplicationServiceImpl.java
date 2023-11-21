@@ -5,15 +5,22 @@ import com.moa.global.common.exception.CustomException;
 import com.moa.global.common.exception.ErrorCode;
 import com.moa.participate.domain.ApplicationStatus;
 import com.moa.participate.domain.ParticipantApplication;
+import com.moa.participate.dto.ParticipantApplicationListItemGetDto;
 import com.moa.participate.dto.ParticipantCreateDto;
 import com.moa.participate.infrastructure.ParticipantApplicationRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 
 @Service
 @RequiredArgsConstructor
 public class ParticipantApplicationServiceImpl implements ParticipantApplicationService {
+
+	private final ModelMapper modelMapper;
 
 	private final ParticipantApplicationRepository participantApplicationRepository;
 
@@ -43,6 +50,15 @@ public class ParticipantApplicationServiceImpl implements ParticipantApplication
 							applicationStatus));
 				}
 			);
+	}
+
+
+	@Override
+	public List<ParticipantApplicationListItemGetDto> getParticipantApplicationListByApplicationStatus(UUID uuid, ApplicationStatus applicationStatus) {
+		List<ParticipantApplication> entityList = participantApplicationRepository.findByParticipantUuidAndApplicationStatusOrderByIdDesc(uuid, applicationStatus);
+		return entityList.stream()
+			.map(o -> modelMapper.map(o, ParticipantApplicationListItemGetDto.class))
+			.toList();
 	}
 
 }
