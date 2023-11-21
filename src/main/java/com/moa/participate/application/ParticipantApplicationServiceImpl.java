@@ -78,30 +78,32 @@ public class ParticipantApplicationServiceImpl implements ParticipantApplication
 
 	@Override
 	@Transactional
-	public void approveParticipantApplication(Long id) {
+	public void updateParticipantApplicationByHost(Long id, ApplicationStatus applicationStatus) {
 		ParticipantApplication participantApplication = participantApplicationRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RESOURCE));
+		ApplicationStatus prevApplicationStatus = participantApplication.getApplicationStatus();
 		participantApplication.setApplicationStatus(ApplicationStatus.APPROVE);
 
 		// 모임 참여 신청을 승인할 경우 update 이벤트 발행
 		participateStatusUpdateEventProducer.sendParticipateStatusUpdateEvent(
-			ParticipantApplicationUpdateEventDto.fromEntityAndApplicationStatus(participantApplication, ApplicationStatus.APPROVE)
+			ParticipantApplicationUpdateEventDto.fromEntityAndPrevApplicationStatus(participantApplication, prevApplicationStatus, true)
 		);
-
-		participantApplication.setApplicationStatus(ApplicationStatus.DENY);
 	}
 
 
 	@Override
 	@Transactional
-	public void denyParticipantApplication(Long id) {
+	public void cancelParticipantApplication(Long id, UUID userUuid) {
 		ParticipantApplication participantApplication = participantApplicationRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RESOURCE));
+		if (!participantApplication.getParticipantUuid().equals(userUuid)) throw new CustomException(ErrorCode.BAD_REQUEST);
+
+		ApplicationStatus prevApplicationStatus = participantApplication.getApplicationStatus();
+		participantApplication.setApplicationStatus(ApplicationStatus.CANCEL);
 
 		// 모임 참여 신청을 거절할 경우 update 이벤트 발행
 		participateStatusUpdateEventProducer.sendParticipateStatusUpdateEvent(
-			ParticipantApplicationUpdateEventDto.fromEntityAndApplicationStatus(participantApplication, ApplicationStatus.DENY)
+			ParticipantApplicationUpdateEventDto.fromEntityAndPrevApplicationStatus(participantApplication, ApplicationStatus.CANCEL, true)
 		);
 
-		participantApplication.setApplicationStatus(ApplicationStatus.DENY);
 	}
 
 }
