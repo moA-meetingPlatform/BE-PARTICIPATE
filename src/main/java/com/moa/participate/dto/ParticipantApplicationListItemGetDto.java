@@ -1,19 +1,19 @@
 package com.moa.participate.dto;
 
 
-import lombok.AllArgsConstructor;
+import com.moa.participate.domain.ApplicationStatus;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 
 @Getter
 @Setter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ParticipantApplicationListItemGetDto {
 
 	private Long meetingId;
-	private LocalDate applicationDate;
+	private ApplicationStatus applicationStatus;
 
 }

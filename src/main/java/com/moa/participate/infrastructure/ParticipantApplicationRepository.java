@@ -13,6 +13,6 @@ import java.util.UUID;
 public interface ParticipantApplicationRepository extends JpaRepository<ParticipantApplication, Long> {
 
 	Optional<ParticipantApplication> findByMeetingIdAndParticipantUuid(Long meetingId, UUID participantUuid);
-	List<ParticipantApplication> findByParticipantUuidAndApplicationStatus(UUID participantUuid, ApplicationStatus applicationStatus);
+	List<ParticipantApplication> findByParticipantUuidAndApplicationStatusOrderByIdDesc(UUID participantUuid, ApplicationStatus applicationStatus);
 
 }
