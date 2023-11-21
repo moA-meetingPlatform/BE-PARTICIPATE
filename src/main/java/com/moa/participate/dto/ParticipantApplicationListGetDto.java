@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ParticipantApplicationListGetDto {
 
-	private List<ParticipantApplicationListItemGetDto> list; // 모임 참여 신청 리스트
+	private List<ParticipantApplicationGetDto> list; // 모임 참여 신청 리스트
 	private Integer count; // 모임의 갯수
 
 }

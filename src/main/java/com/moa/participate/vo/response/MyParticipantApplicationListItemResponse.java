@@ -1,7 +1,7 @@
 package com.moa.participate.vo.response;
 
 
-import com.moa.participate.dto.ParticipantApplicationListItemGetDto;
+import com.moa.participate.dto.ParticipantApplicationGetDto;
 import lombok.*;
 
 
@@ -21,7 +21,7 @@ public class MyParticipantApplicationListItemResponse {
 	 *
 	 * @param dto
 	 */
-	public MyParticipantApplicationListItemResponse(ParticipantApplicationListItemGetDto dto) {
+	public MyParticipantApplicationListItemResponse(ParticipantApplicationGetDto dto) {
 		this.meetingId = dto.getMeetingId();
 		this.applicationStatus = dto.getApplicationStatus().getTitle();
 	}
