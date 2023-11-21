@@ -20,14 +20,14 @@ public class ParticipateStatusUpdateEventProducer {
 	private final KafkaTemplate<String, String> kafkaTemplate;
 
 	private final ObjectMapper objectMapper;
-	private String topic = "participate-host-update-event";
+	private final String TOPIC = "participate-update";
 
 
 	public void sendParticipateStatusUpdateEvent(ParticipantApplicationUpdateEventDto dto) {
 		log.debug(String.format("Produce dto : %s", dto));
 		try {
 			String message = objectMapper.writeValueAsString(dto);
-			kafkaTemplate.send(topic, message);
+			kafkaTemplate.send(TOPIC, message);
 		} catch (JsonProcessingException e) {
 			log.error("JsonProcessingException : {}", e.getMessage() + "\n" + dto.toString());
 			throw new CustomException(ErrorCode.BAD_REQUEST);
