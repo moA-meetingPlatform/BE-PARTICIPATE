@@ -31,7 +31,7 @@ public class ParticipantApplication extends BaseDateTime {
 	@Column(name = "application_status", nullable = false)
 	private ApplicationStatus applicationStatus;
 
-	@Column(name = "participation_status", columnDefinition = "tinyint default 0")
+	@Column(name = "participation_status", columnDefinition = "tinyint")
 	private Boolean participationStatus;
 
 	@Column(name = "meeting_participation_answer")
@@ -52,7 +52,6 @@ public class ParticipantApplication extends BaseDateTime {
 		this.participantUuid = participantUuid;
 		this.meetingParticipationAnswer = meetingParticipationAnswer;
 		this.applicationStatus = applicationStatus;
-		this.participationStatus = false;
 		this.refundRequiredStatus = false;
 		this.refundPercentage = 0.0f;
 		this.refundAmount = 0;
