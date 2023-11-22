@@ -35,6 +35,12 @@ public class ParticipantReviewServiceImpl implements ParticipantReviewService {
 	public void createParticipantReview(ParticipantReviewCreateDto dto) {
 		ParticipantApplication participantApplication = participantApplicationRepository.findById(dto.getParticipantApplicationId())
 			.orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST)); // 참가자 존재하지 않을 경우 예외
+
+		// 참가자 리뷰가 이미 존재할 경우 예외
+		if (participantReviewRepository.existsByParticipantApplicationAndReviewerUserUuid(participantApplication, dto.getReviewrUserUuid())) {
+			throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+		}
+
 		ParticipantReview participantReview = new ParticipantReview(dto.getReviewrUserUuid(), participantApplication.getParticipantUuid(), dto.getRating(), participantApplication);
 		participantReviewRepository.save(participantReview);
 
