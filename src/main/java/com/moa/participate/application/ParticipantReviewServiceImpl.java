@@ -6,9 +6,12 @@ import com.moa.global.common.exception.ErrorCode;
 import com.moa.participate.domain.ParticipantApplication;
 import com.moa.participate.domain.ParticipantReview;
 import com.moa.participate.dto.ParticipantReviewCreateDto;
+import com.moa.participate.dto.kafka.ParticipantReviewCreateEventDto;
 import com.moa.participate.infrastructure.ParticipantApplicationRepository;
 import com.moa.participate.infrastructure.ParticipantReviewRepository;
+import com.moa.participate.infrastructure.kafka.producer.ParticipantReviewCreateEventProducer;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +22,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ParticipantReviewServiceImpl implements ParticipantReviewService {
 
+	private final ModelMapper modelMapper;
+
 	private final ParticipantReviewRepository participantReviewRepository;
 	private final ParticipantApplicationRepository participantApplicationRepository;
+
+	private final ParticipantReviewCreateEventProducer participantReviewCreateEventProducer;
 
 
 	@Override
@@ -30,6 +37,8 @@ public class ParticipantReviewServiceImpl implements ParticipantReviewService {
 			.orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST)); // 참가자 존재하지 않을 경우 예외
 		ParticipantReview participantReview = new ParticipantReview(dto.getReviewrUserUuid(), participantApplication.getParticipantUuid(), dto.getRating(), participantApplication);
 		participantReviewRepository.save(participantReview);
+
+		participantReviewCreateEventProducer.sendEvent(new ParticipantReviewCreateEventDto(participantReview.getReviewTargetUserUuid(), participantReview.getRating()));
 	}
 
 
