@@ -9,6 +9,7 @@ import com.moa.participate.dto.ParticipantApplicationGetDto;
 import com.moa.participate.dto.ParticipantCreateDto;
 import com.moa.participate.dto.kafka.ParticipantApplicationUpdateEventDto;
 import com.moa.participate.infrastructure.ParticipantApplicationRepository;
+import com.moa.participate.infrastructure.ParticipantReviewRepository;
 import com.moa.participate.infrastructure.kafka.producer.ParticipateStatusUpdateEventProducer;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -26,6 +27,7 @@ public class ParticipantApplicationServiceImpl implements ParticipantApplication
 	private final ModelMapper modelMapper;
 
 	private final ParticipantApplicationRepository participantApplicationRepository;
+	private final ParticipantReviewRepository participantReviewRepository;
 
 	private final ParticipateStatusUpdateEventProducer participateStatusUpdateEventProducer;
 
@@ -104,6 +106,20 @@ public class ParticipantApplicationServiceImpl implements ParticipantApplication
 			ParticipantApplicationUpdateEventDto.fromEntityAndPrevApplicationStatus(participantApplication, prevApplicationStatus, true)
 		);
 
+	}
+
+
+	@Override
+	public void updateParticipationStatusByReview(Long participateId, UUID targetUuid, boolean participationStatus) {
+		// 기존에 참여 신청한 내역이 있는지 확인
+		ParticipantApplication participantApplication = participantApplicationRepository.findById(participateId)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RESOURCE));
+
+		// 기존에 참여 여부가 null이거나 false일 경우에만 업데이트
+		if (participantApplication.getParticipationStatus() == null
+			|| (participationStatus && !participantApplication.getParticipationStatus())) {
+			participantApplication.setParticipationStatus(participationStatus);
+		}
 	}
 
 }

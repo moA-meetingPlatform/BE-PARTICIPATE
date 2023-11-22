@@ -37,6 +37,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ApiResult<Void>> methodArgumentValidException() {
+		log.error("handleMethodArgumentNotValidException");
 		return new ResponseEntity<>(ApiResult.ofError(ErrorCode.BAD_REQUEST), ErrorCode.BAD_REQUEST.getStatus());
 	}
 

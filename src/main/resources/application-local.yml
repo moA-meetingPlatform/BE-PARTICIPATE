@@ -28,4 +28,4 @@ spring:
 
 logging.level:
   org.hibernate.orm.jdbc.bind: trace
-  com.moa.participate: DEBUG
+  com.moa: DEBUG

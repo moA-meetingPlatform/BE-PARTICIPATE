@@ -70,4 +70,9 @@ public class ParticipantApplication extends BaseDateTime {
 		this.refundPercentage = refundPercentage;
 	}
 
+
+	public void setParticipationStatus(Boolean participationStatus) {
+		this.participationStatus = participationStatus;
+	}
+
 }
