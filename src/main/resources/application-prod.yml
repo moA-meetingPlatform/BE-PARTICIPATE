@@ -48,4 +48,6 @@ logging.level: # 서버 디버깅용 임시 설정
 springdoc:
   swagger-ui:
     path: /api/v1/meeting-feature/swagger-ui.html
+  api-docs:
+    path: /api/v1/meeting-feature/api-docs
 
