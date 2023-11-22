@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 env:
-  IMAGE_TAG: dev-3
+  IMAGE_TAG: dev-4
 
 jobs:
 
@@ -41,7 +41,7 @@ jobs:
           push: true
           tags: awdfaf/be-participate:${{ env.IMAGE_TAG }}
           platforms: linux/amd64
-          build-args: 
+          build-args:
             COLOR=${{ env.IMAGE_TAG }}
 
   deploy:
