@@ -40,4 +40,10 @@ spring:
 
 logging.level: # 서버 디버깅용 임시 설정
   org.hibernate.orm.jdbc.bind: trace
-  com.moa.participate: DEBUG
+  com.moa: DEBUG
+
+# prod 환경 swagger 경로 설정
+springdoc:
+  swagger-ui:
+    path: /api/v1/meeting-feature/swagger-ui.html
+
