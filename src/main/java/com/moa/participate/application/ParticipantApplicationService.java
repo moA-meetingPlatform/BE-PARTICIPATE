@@ -19,4 +19,6 @@ public interface ParticipantApplicationService {
 
 	void cancelParticipantApplication(Long id, UUID userUuid);
 
+	void updateParticipationStatusByReview(Long meetingId, UUID targetUuid, boolean participationStatus);
+
 }
