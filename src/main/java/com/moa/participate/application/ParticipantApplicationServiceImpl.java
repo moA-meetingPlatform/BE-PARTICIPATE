@@ -83,9 +83,9 @@ public class ParticipantApplicationServiceImpl implements ParticipantApplication
 	public void updateParticipantApplicationByHost(Long id, ApplicationStatus applicationStatus) {
 		ParticipantApplication participantApplication = participantApplicationRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RESOURCE));
 		ApplicationStatus prevApplicationStatus = participantApplication.getApplicationStatus();
-		participantApplication.setApplicationStatus(ApplicationStatus.APPROVE);
+		participantApplication.setApplicationStatus(applicationStatus);
 
-		// 모임 참여 신청을 승인할 경우 update 이벤트 발행
+		// 모임 참여 신청을 승인 또는 거절할 경우 update 이벤트 발행
 		participateStatusUpdateEventProducer.sendParticipateStatusUpdateEvent(
 			ParticipantApplicationUpdateEventDto.fromEntityAndPrevApplicationStatus(participantApplication, prevApplicationStatus, true)
 		);
@@ -101,9 +101,9 @@ public class ParticipantApplicationServiceImpl implements ParticipantApplication
 		ApplicationStatus prevApplicationStatus = participantApplication.getApplicationStatus();
 		participantApplication.setApplicationStatus(ApplicationStatus.CANCEL);
 
-		// 모임 참여 신청을 거절할 경우 update 이벤트 발행
+		// 참가자가 모임 참여 신청을 취소할 경우 update 이벤트 발행
 		participateStatusUpdateEventProducer.sendParticipateStatusUpdateEvent(
-			ParticipantApplicationUpdateEventDto.fromEntityAndPrevApplicationStatus(participantApplication, prevApplicationStatus, true)
+			ParticipantApplicationUpdateEventDto.fromEntityAndPrevApplicationStatus(participantApplication, prevApplicationStatus, false)
 		);
 
 	}
