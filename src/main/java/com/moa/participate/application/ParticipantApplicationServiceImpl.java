@@ -7,6 +7,7 @@ import com.moa.participate.domain.ApplicationStatus;
 import com.moa.participate.domain.ParticipantApplication;
 import com.moa.participate.dto.ParticipantApplicationGetDto;
 import com.moa.participate.dto.ParticipantCreateDto;
+import com.moa.participate.dto.kafka.MeetingCancelEventDto;
 import com.moa.participate.dto.kafka.MeetingRefundNeedDto;
 import com.moa.participate.dto.kafka.ParticipantApplicationUpdateEventDto;
 import com.moa.participate.infrastructure.ParticipantApplicationRepository;
@@ -136,6 +137,23 @@ public class ParticipantApplicationServiceImpl implements ParticipantApplication
 			participantApplication.setRefundData(dto.getRefundPercentage(), dto.getRefundAmount());
 		} catch (Exception e) {
 			log.error("updateParticipantRefundInfoByKafka error : {}", e.getMessage());
+		}
+	}
+
+
+	/**
+	 * 모임 취소 이벤트 발생 시
+	 * 환불 관련된 참여 신청 정보 업데이트
+	 *
+	 * @param cancelEventDto
+	 */
+	@Override
+	@Transactional
+	public void updateParticipantRefundInfoByMeetingCancelEvent(MeetingCancelEventDto cancelEventDto) {
+		List<ParticipantApplication> participantApplicationList = participantApplicationRepository.findByMeetingIdAndApplicationStatus(cancelEventDto.getMeetingId(), ApplicationStatus.APPROVE);
+
+		for (ParticipantApplication participantApplication : participantApplicationList) {
+			participantApplication.setRefundData(1.0f, cancelEventDto.getEntryFee());
 		}
 	}
 
