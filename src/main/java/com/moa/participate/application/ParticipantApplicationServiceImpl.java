@@ -7,11 +7,13 @@ import com.moa.participate.domain.ApplicationStatus;
 import com.moa.participate.domain.ParticipantApplication;
 import com.moa.participate.dto.ParticipantApplicationGetDto;
 import com.moa.participate.dto.ParticipantCreateDto;
+import com.moa.participate.dto.kafka.MeetingRefundNeedDto;
 import com.moa.participate.dto.kafka.ParticipantApplicationUpdateEventDto;
 import com.moa.participate.infrastructure.ParticipantApplicationRepository;
 import com.moa.participate.infrastructure.ParticipantReviewRepository;
 import com.moa.participate.infrastructure.kafka.producer.ParticipateStatusUpdateEventProducer;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ import java.util.UUID;
 
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ParticipantApplicationServiceImpl implements ParticipantApplicationService {
 
@@ -119,6 +122,20 @@ public class ParticipantApplicationServiceImpl implements ParticipantApplication
 		if (participantApplication.getParticipationStatus() == null
 			|| (participationStatus && !participantApplication.getParticipationStatus())) {
 			participantApplication.setParticipationStatus(participationStatus);
+		}
+	}
+
+
+	@Override
+	@Transactional
+	public void updateParticipantRefundInfoByKafka(MeetingRefundNeedDto dto) {
+		try {
+			ParticipantApplication participantApplication = participantApplicationRepository.findById(dto.getParticipateId())
+				.orElseThrow(() -> new IllegalArgumentException("참여 신청 정보가 없습니다."));
+
+			participantApplication.setRefundData(dto.getRefundPercentage(), dto.getRefundAmount());
+		} catch (Exception e) {
+			log.error("updateParticipantRefundInfoByKafka error : {}", e.getMessage());
 		}
 	}
 

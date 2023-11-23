@@ -63,9 +63,9 @@ public class ParticipantApplication extends BaseDateTime {
 	}
 
 
-	public void setRefundData(Float refundPercentage, Integer entryFee) {
+	public void setRefundData(Float refundPercentage, Integer refundAmount) {
 		this.refundRequiredStatus = true;
-		this.refundAmount = (int) (entryFee * (1 - refundPercentage));
+		this.refundAmount = refundAmount;
 		this.refundPercentage = refundPercentage;
 	}
 
