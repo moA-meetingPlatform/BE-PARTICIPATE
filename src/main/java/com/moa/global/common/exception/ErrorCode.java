@@ -7,8 +7,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {
-
-	NOT_FOUND_RESOURCE(HttpStatus.NOT_FOUND, "해당 자원이 존재하지 않습니다."),
+	
 	DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "이미 존재하는 데이터입니다."),
 	METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "Method Not Allowed"),
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"),

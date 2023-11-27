@@ -52,6 +52,7 @@ public class HostParticipateController {
 	@Operation(summary = "모임 참여 신청 승인(Y) / 거절(N), status: Y, N", description = "ParticipantApplication의 status를 변경, 승인시 Meeting의 currentParticipantCount 증가")
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "OK"),
+		@ApiResponse(responseCode = "400", description = "해당 모임에 참여 신청한 유저가 아닙니다"),
 		@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
 	})
 	@PostMapping("/{participateId}/{status}")
