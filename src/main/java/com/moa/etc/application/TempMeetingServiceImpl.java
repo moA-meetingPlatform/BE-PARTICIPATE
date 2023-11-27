@@ -6,8 +6,6 @@ import com.moa.etc.dto.TempMeetingCreateDto;
 import com.moa.etc.dto.TempMeetingDeleteDto;
 import com.moa.etc.dto.TempMeetingGetDto;
 import com.moa.etc.infrastructure.TempMeetingRepository;
-import com.moa.global.common.exception.CustomException;
-import com.moa.global.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -52,15 +50,15 @@ public class TempMeetingServiceImpl implements TempMeetingService {
 
 	@Override
 	public TempMeetingGetDto getTempMeetingByUuid(UUID userUuid) {
+		String tempUrl = null;
 		TempMeeting tempMeeting = tempMeetingRepository.getByUserUuid(userUuid);
 
-		if (tempMeeting == null || tempMeeting.getTemporaryMeetingDataUrl() == null) {
-			// 유저의 임시 미팅 테이블이 없거나 url이 비어있으면 에러
-			throw new CustomException(ErrorCode.NOT_FOUND_RESOURCE);
+		if (tempMeeting != null && tempMeeting.getTemporaryMeetingDataUrl() != null) {
+			tempUrl = tempMeeting.getTemporaryMeetingDataUrl();
 		}
 
 		// 유저의 임시 미팅 테이블이 있고 url이 비어있지 않으면 url 리턴
-		return new TempMeetingGetDto(tempMeeting);
+		return new TempMeetingGetDto(tempUrl);
 	}
 
 }

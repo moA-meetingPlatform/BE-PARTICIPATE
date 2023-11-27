@@ -1,18 +1,14 @@
 package com.moa.etc.dto;
 
 
-import com.moa.etc.domain.TempMeeting;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 
 @Getter
+@AllArgsConstructor
 public class TempMeetingGetDto {
 
 	private String tempUrl;
-
-
-	public TempMeetingGetDto(TempMeeting tempMeeting) {
-		this.tempUrl = tempMeeting.getTemporaryMeetingDataUrl();
-	}
 
 }
