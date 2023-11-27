@@ -32,7 +32,7 @@ public class TempMeetingController {
 	private final TempMeetingService tempMeetingService;
 
 
-	@Operation(summary = "유저의 임시 모임 데이터 조회", description = "모임 임시 데이터 조회, 유저 uuid 필요")
+	@Operation(summary = "유저의 임시 모임 데이터 조회", description = "모임 임시 데이터 조회, 유저 uuid 필요, 없을 경우 \"tempUrl\": null 반환")
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "OK"),
 		@ApiResponse(responseCode = "401", description = "UNAUTHORIZED"),
