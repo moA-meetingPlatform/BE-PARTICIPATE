@@ -70,6 +70,13 @@ public class ParticipantApplication extends BaseDateTime {
 	}
 
 
+	public void resetRefundData() {
+		this.refundRequiredStatus = false;
+		this.refundAmount = 0;
+		this.refundPercentage = 0.0f;
+	}
+
+
 	public void setParticipationStatus(Boolean participationStatus) {
 		this.participationStatus = participationStatus;
 	}

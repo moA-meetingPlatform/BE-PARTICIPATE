@@ -54,6 +54,7 @@ public class ParticipateController {
 	@Operation(summary = "모임 참가 취소", description = "모임 참가 취소")
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "OK"),
+		@ApiResponse(responseCode = "400", description = "해당 모임에 참여 신청한 내역이 없음"),
 		@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
 	})
 	@PostMapping("/{participateId}/cancel")

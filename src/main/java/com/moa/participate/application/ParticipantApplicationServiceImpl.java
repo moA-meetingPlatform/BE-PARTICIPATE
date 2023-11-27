@@ -52,8 +52,11 @@ public class ParticipantApplicationServiceImpl implements ParticipantApplication
 		// 중복되지 않았다면 저장하기
 		participantApplicationRepository.findByMeetingIdAndParticipantUuid(participantCreateDto.getMeetingId(), participantCreateDto.getParticipantUuid())
 			.ifPresentOrElse(
-				(participantApplication -> {    // 중복되었다면 에러 발생
-					throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+				(participantApplication -> {
+					if (participantApplication.getApplicationStatus() != ApplicationStatus.WAIT && participantApplication.getApplicationStatus() != ApplicationStatus.APPROVE) {
+						participantApplication.setApplicationStatus(applicationStatus);
+						participantApplication.resetRefundData();
+					}
 				}),
 				() -> { // 중복되지 않았다면 저장
 					participantApplicationRepository.save(
@@ -85,7 +88,7 @@ public class ParticipantApplicationServiceImpl implements ParticipantApplication
 	@Override
 	@Transactional
 	public void updateParticipantApplicationByHost(Long id, ApplicationStatus applicationStatus) {
-		ParticipantApplication participantApplication = participantApplicationRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RESOURCE));
+		ParticipantApplication participantApplication = participantApplicationRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
 		ApplicationStatus prevApplicationStatus = participantApplication.getApplicationStatus();
 		participantApplication.setApplicationStatus(applicationStatus);
 
@@ -99,16 +102,18 @@ public class ParticipantApplicationServiceImpl implements ParticipantApplication
 	@Override
 	@Transactional
 	public void cancelParticipantApplication(Long id, UUID userUuid) {
-		ParticipantApplication participantApplication = participantApplicationRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RESOURCE));
+		ParticipantApplication participantApplication = participantApplicationRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
 		if (!participantApplication.getParticipantUuid().equals(userUuid)) throw new CustomException(ErrorCode.BAD_REQUEST);
 
 		ApplicationStatus prevApplicationStatus = participantApplication.getApplicationStatus();
-		participantApplication.setApplicationStatus(ApplicationStatus.CANCEL);
+		if (prevApplicationStatus == ApplicationStatus.APPROVE || prevApplicationStatus == ApplicationStatus.WAIT) {
+			participantApplication.setApplicationStatus(ApplicationStatus.CANCEL);
 
-		// 참가자가 모임 참여 신청을 취소할 경우 update 이벤트 발행
-		participateStatusUpdateEventProducer.sendParticipateStatusUpdateEvent(
-			ParticipantApplicationUpdateEventDto.fromEntityAndPrevApplicationStatus(participantApplication, prevApplicationStatus, false)
-		);
+			// 참가자가 모임 참여 신청을 취소할 경우 참여 update 이벤트 발행
+			participateStatusUpdateEventProducer.sendParticipateStatusUpdateEvent(
+				ParticipantApplicationUpdateEventDto.fromEntityAndPrevApplicationStatus(participantApplication, prevApplicationStatus, false)
+			);
+		}
 
 	}
 
@@ -117,7 +122,7 @@ public class ParticipantApplicationServiceImpl implements ParticipantApplication
 	public void updateParticipationStatusByReview(Long participateId, UUID targetUuid, boolean participationStatus) {
 		// 기존에 참여 신청한 내역이 있는지 확인
 		ParticipantApplication participantApplication = participantApplicationRepository.findById(participateId)
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RESOURCE));
+			.orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
 
 		// 기존에 참여 여부가 null이거나 false일 경우에만 업데이트
 		if (participantApplication.getParticipationStatus() == null
